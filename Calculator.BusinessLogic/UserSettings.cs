@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
 namespace Calculator.BusinessLogic;
@@ -9,6 +10,11 @@ public class UserSettings
 
     public string? GetUserName()
     {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return null;
+        }
+
         try
         {
             using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(RegistryKeyPath))
@@ -24,6 +30,13 @@ public class UserSettings
 
     public void SetUserName(string userName)
     {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            // On non-Windows platforms, registry is not available
+            // In a real application, you might use a different storage mechanism
+            return;
+        }
+
         try
         {
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyPath))

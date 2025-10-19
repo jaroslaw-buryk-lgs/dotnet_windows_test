@@ -1,4 +1,5 @@
-﻿using Calculator.BusinessLogic;
+﻿using System.Runtime.InteropServices;
+using Calculator.BusinessLogic;
 
 namespace Calculator.CLI;
 
@@ -18,7 +19,14 @@ class Program
             if (!string.IsNullOrEmpty(userName))
             {
                 userSettings.SetUserName(userName);
-                Console.WriteLine($"Hello, {userName}! Your name has been saved.");
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    Console.WriteLine($"Hello, {userName}! Your name has been saved to Windows Registry.");
+                }
+                else
+                {
+                    Console.WriteLine($"Hello, {userName}! (Note: Registry storage is only available on Windows)");
+                }
             }
         }
         else
